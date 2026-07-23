@@ -1,25 +1,15 @@
-package com.lideratec;
-
-import com.lideratec.modelo.DetalleVenta;
-import com.lideratec.modelo.Producto;
+package model;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class VentaService {
 
-    private static final double IGV = 0.18;
+    // Colección para almacenar los detalles de la venta
+    private ArrayList<DetalleVenta> detalles = new ArrayList<>();
 
-    // Colección para almacenar los productos de la venta
-    private List<DetalleVenta> detalleVenta;
+    private final double IGV = 0.18;
 
-    public VentaService() {
-        detalleVenta = new ArrayList<>();
-    }
-
-    // ===========================
     // VALIDACIONES
-    // ===========================
 
     public boolean validarNombre(String nombre) {
         return nombre != null && !nombre.trim().isEmpty();
@@ -38,9 +28,7 @@ public class VentaService {
         return producto.getStock() >= cantidad;
     }
 
-    // ===========================
     // AGREGAR PRODUCTO
-    // ===========================
 
     public boolean agregarProducto(Producto producto, int cantidad) {
 
@@ -56,91 +44,78 @@ public class VentaService {
 
         DetalleVenta detalle = new DetalleVenta(producto, cantidad);
 
-        detalleVenta.add(detalle);
+        detalles.add(detalle);
 
         return true;
     }
 
-    // ===========================
-    // SUBTOTAL
-    // ===========================
+    // CALCULAR SUBTOTAL
 
     public double calcularSubtotal() {
 
         double subtotal = 0;
 
-        for (DetalleVenta detalle : detalleVenta) {
+        for (DetalleVenta detalle : detalles) {
             subtotal += detalle.getSubtotal();
         }
 
         return Math.round(subtotal * 100.0) / 100.0;
     }
 
-    // ===========================
-    // IGV
-    // ===========================
+    // CALCULAR IGV
 
     public double calcularIGV() {
 
-        double igv = calcularSubtotal() * IGV;
+        return Math.round(calcularSubtotal() * IGV * 100.0) / 100.0;
 
-        return Math.round(igv * 100.0) / 100.0;
     }
 
-    // ===========================
-    // TOTAL
-    // ===========================
+    // CALCULAR TOTAL
+
 
     public double calcularTotal() {
 
         return calcularSubtotal() + calcularIGV();
+
     }
 
-    // ===========================
-    // ACTUALIZAR STOCK
-    // ===========================
+    // ACTUALIZAR INVENTARIO
 
-    public void actualizarInventario() {
+    public void actualizarStock() {
 
-        for (DetalleVenta detalle : detalleVenta) {
+        for (DetalleVenta detalle : detalles) {
 
             Producto producto = detalle.getProducto();
 
             producto.setStock(
                     producto.getStock() - detalle.getCantidad()
             );
+
         }
 
     }
 
-    // ===========================
     // MOSTRAR DETALLE
-    // ===========================
 
-    public void mostrarDetalle() {
+    public void mostrarVenta() {
 
-        System.out.println("\n===== DETALLE DE VENTA =====");
+        System.out.println("========== DETALLE ==========");
 
-        for (DetalleVenta detalle : detalleVenta) {
+        for (DetalleVenta detalle : detalles) {
 
-            System.out.println(
-                    detalle.getProducto().getNombre()
-                            + " | Cantidad: "
-                            + detalle.getCantidad()
-                            + " | Subtotal: S/. "
-                            + detalle.getSubtotal()
-            );
+            System.out.println(detalle);
+
         }
 
-        System.out.println("------------------------------");
-        System.out.println("Subtotal : S/. " + calcularSubtotal());
-        System.out.println("IGV      : S/. " + calcularIGV());
-        System.out.println("Total    : S/. " + calcularTotal());
+        System.out.println("-----------------------------");
+        System.out.println("Subtotal : S/ " + calcularSubtotal());
+        System.out.println("IGV      : S/ " + calcularIGV());
+        System.out.println("Total    : S/ " + calcularTotal());
 
     }
 
-    public List<DetalleVenta> getDetalleVenta() {
-        return detalleVenta;
+    public ArrayList<DetalleVenta> getDetalles() {
+        return detalles;
     }
 
 }
