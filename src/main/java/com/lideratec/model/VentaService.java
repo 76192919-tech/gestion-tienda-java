@@ -4,12 +4,10 @@ import java.util.ArrayList;
 
 public class VentaService {
 
-    // Colección para almacenar los detalles de la venta
     private ArrayList<DetalleVenta> detalles = new ArrayList<>();
 
     private final double IGV = 0.18;
 
-    // VALIDACIONES
 
     public boolean validarNombre(String nombre) {
         return nombre != null && !nombre.trim().isEmpty();
@@ -28,7 +26,6 @@ public class VentaService {
         return producto.getStock() >= cantidad;
     }
 
-    // AGREGAR PRODUCTO
 
     public boolean agregarProducto(Producto producto, int cantidad) {
 
@@ -49,7 +46,6 @@ public class VentaService {
         return true;
     }
 
-    // CALCULAR SUBTOTAL
 
     public double calcularSubtotal() {
 
@@ -62,7 +58,6 @@ public class VentaService {
         return Math.round(subtotal * 100.0) / 100.0;
     }
 
-    // CALCULAR IGV
 
     public double calcularIGV() {
 
@@ -70,7 +65,6 @@ public class VentaService {
 
     }
 
-    // CALCULAR TOTAL
 
 
     public double calcularTotal() {
@@ -79,7 +73,6 @@ public class VentaService {
 
     }
 
-    // ACTUALIZAR INVENTARIO
 
     public void actualizarStock() {
 
@@ -95,7 +88,6 @@ public class VentaService {
 
     }
 
-    // MOSTRAR DETALLE
 
     public void mostrarVenta() {
 
